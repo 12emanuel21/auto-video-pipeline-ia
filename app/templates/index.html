@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stoic Studio Engine — Generador Autónomo TikTok</title>
+  
+  <!-- Google Fonts: Cinzel for stoic imperial headers, Inter for sleek body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS v3 via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            stoic: {
+              black: '#0A0A0C',
+              bg: '#0F0F11',
+              card: '#16161A',
+              cardHover: '#1B1B20',
+              border: '#27272E',
+              gold: '#FCE282',
+              goldHover: '#E5C85A',
+              goldDim: '#9C8532',
+              text: '#E4E4E7',
+              muted: '#9CA3AF'
+            }
+          },
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0F0F11;
+      color: #E4E4E7;
+      font-family: 'Inter', sans-serif;
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #FFF1B0 0%, #FCE282 50%, #C99E32 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gold-border-glow {
+      box-shadow: 0 0 15px -3px rgba(252, 226, 130, 0.15);
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0F0F11;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #27272E;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3F3F46;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-stoic-bg text-stoic-text selection:bg-stoic-gold selection:text-black">
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Header / Navigation Bar -->
+  <header class="border-b border-stoic-border bg-stoic-black/80 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand & Status -->
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-stoic-gold to-stoic-goldDim p-[1px] flex items-center justify-center shadow-lg">
+          <div class="w-full h-full bg-stoic-black rounded-lg flex items-center justify-center">
+            <i data-lucide="crown" class="w-5 h-5 text-stoic-gold"></i>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-cinzel text-xl font-bold tracking-wider gold-gradient-text">STOIC STUDIO</h1>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-stoic-gold/10 border border-stoic-gold/30 text-stoic-gold font-mono font-medium">ENGINE v1.0</span>
+          </div>
+          <p class="text-xs text-stoic-muted flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            En línea en <span class="font-mono text-zinc-300">0.0.0.0:8855</span> • Motor TikTok Autónomo
+          </p>
+        </div>
+      </div>
+
+      <!-- TikTok Auth Status -->
+      <div class="flex items-center mr-4">
+        {% if tiktok_connected %}
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            TikTok Conectado ✅
+          </div>
+        {% else %}
+          <a href="/auth/tiktok/login" class="flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ff0050] hover:bg-[#e60048] text-white text-xs font-semibold transition shadow-lg shadow-[#ff0050]/20">
+            <i data-lucide="smartphone" class="w-4 h-4"></i>
+            Conectar TikTok
+          </a>
+        {% endif %}
+      </div>
+
+      <!-- Quick Metrics Counters -->
+      <div class="flex items-center gap-3 text-xs">
+        <div class="bg-stoic-card border border-stoic-border px-3.5 py-1.5 rounded-lg flex items-center gap-2">
+          <i data-lucide="film" class="w-4 h-4 text-zinc-400"></i>
+          <span class="text-zinc-400">Total:</span>
+          <span id="metric-total" class="font-bold text-white text-sm">{{ metrics.total }}</span>
+        </div>
+
+        <div class="bg-amber-500/10 border border-amber-500/30 px-3.5 py-1.5 rounded-lg flex items-center gap-2">
+          <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+          <span class="text-amber-200">Pendientes:</span>
+          <span id="metric-pending" class="font-bold text-amber-400 text-sm">{{ metrics.pending }}</span>
+        </div>
+
+        <div class="bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-1.5 rounded-lg flex items-center gap-2">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+          <span class="text-emerald-200">Aprobados:</span>
+          <span id="metric-approved" class="font-bold text-emerald-400 text-sm">{{ metrics.approved }}</span>
+        </div>
+
+        <button onclick="window.location.reload()" title="Refrescar catálogo" class="p-2 rounded-lg bg-stoic-card hover:bg-stoic-cardHover border border-stoic-border text-zinc-400 hover:text-white transition">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
+
+    <!-- Action Bar: Fast Video Generator -->
+    <section class="bg-gradient-to-b from-stoic-card to-stoic-black border border-stoic-border rounded-2xl p-6 shadow-xl relative overflow-hidden">
+      <!-- Decorative background accent -->
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-stoic-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="font-cinzel text-lg font-bold text-white flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-5 h-5 text-stoic-gold"></i>
+            Generador de Videos Estoicos con Inteligencia Artificial
+          </h2>
+          <p class="text-xs text-stoic-muted mt-1">
+            Orquesta guiones virales con Gemini, síntesis de voz con Edge-TTS y renderizado 9:16 con MoviePy 2 en segundo plano.
+          </p>
+        </div>
+      </div>
+
+      <form id="generate-form" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+          
+          <!-- Tema Selector or Custom Input -->
+          <div class="md:col-span-5 space-y-1.5">
+            <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider">Tema Estoico</label>
+            <div class="relative">
+              <input 
+                type="text" 
+                id="theme-input" 
+                name="theme" 
+                list="themes-datalist"
+                required
+                placeholder="Ej: El control de las emociones, Memento Mori..."
+                class="w-full bg-stoic-bg border border-stoic-border focus:border-stoic-gold rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-stoic-gold transition"
+                value="El control de las emociones"
+              />
+              <datalist id="themes-datalist">
+                {% for st in suggested_themes %}
+                  <option value="{{ st.name }} ({{ st.author }})"></option>
+                {% endfor %}
+              </datalist>
+            </div>
+          </div>
+
+          <!-- Autor / Filósofo -->
+          <div class="md:col-span-4 space-y-1.5">
+            <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider">Filósofo / Autor</label>
+            <select 
+              id="author-select" 
+              name="author"
+              class="w-full bg-stoic-bg border border-stoic-border focus:border-stoic-gold rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-stoic-gold transition cursor-pointer"
+            >
+              <option value="Marco Aurelio" selected>Marco Aurelio (Meditaciones / Emperador)</option>
+              <option value="Séneca">Séneca (Cartas a Lucilio / Brevedad de la vida)</option>
+              <option value="Epicteto">Epicteto (Enquiridión / Esclavo liberado)</option>
+              <option value="Musonio Rufo">Musonio Rufo (Disertaciones estoicas)</option>
+            </select>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="md:col-span-3 flex items-end">
+            <button 
+              type="submit" 
+              id="btn-generate"
+              class="w-full bg-gradient-to-r from-stoic-gold to-stoic-goldHover hover:brightness-110 text-black font-semibold text-sm py-2.5 px-5 rounded-xl shadow-lg flex items-center justify-center gap-2 transition duration-200 active:scale-95 disabled:opacity-60 disabled:pointer-events-none"
+            >
+              <i data-lucide="video" class="w-4 h-4"></i>
+              <span id="btn-text">Generar Video</span>
+              <div id="btn-spinner" class="hidden w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Quick theme chips for easy clicking -->
+        <div class="flex flex-wrap items-center gap-2 pt-1 text-xs">
+          <span class="text-zinc-500 font-medium">Sugerencias rápidas:</span>
+          {% for st in suggested_themes %}
+            <button 
+              type="button" 
+              onclick="selectSuggestedTheme('{{ st.name }}', '{{ st.author }}')"
+              class="px-2.5 py-1 rounded-md bg-stoic-bg hover:bg-zinc-800 border border-stoic-border text-zinc-300 hover:text-stoic-gold transition flex items-center gap-1"
+            >
+              <span>{{ st.name }}</span>
+            </button>
+          {% endfor %}
+        </div>
+      </form>
+    </section>
+
+    <!-- Market Intelligence & Viral Trends Section -->
+    <section class="bg-stoic-card/80 border border-stoic-border rounded-2xl p-6 shadow-xl space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stoic-border/70 pb-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs px-2 py-0.5 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-300 font-bold uppercase tracking-wider flex items-center gap-1">
+              <i data-lucide="flame" class="w-3.5 h-3.5 text-rose-400"></i> EN TENDENCIA
+            </span>
+            <h3 class="font-cinzel text-lg font-bold text-white">Inteligencia de Mercado & Ganchos Virales</h3>
+          </div>
+          <p class="text-xs text-stoic-muted mt-1">
+            Scraping de videos virales en TikTok / Shorts y análisis psicológico de retención con Gemini para Marco Aurelio.
+          </p>
+        </div>
+
+        <!-- Scraper Search Bar -->
+        <div class="flex items-center gap-2">
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-500 text-xs font-mono">#</span>
+            <input 
+              type="text" 
+              id="scrape-tag-input" 
+              value="estoicismo"
+              placeholder="Tag (ej: estoicismo, disciplina)"
+              class="bg-stoic-bg border border-stoic-border focus:border-stoic-gold rounded-xl pl-7 pr-3 py-1.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-stoic-gold transition w-44"
+            />
+          </div>
+          <button 
+            type="button" 
+            id="btn-scrape-trends"
+            onclick="scrapeTrends()"
+            class="bg-stoic-card hover:bg-zinc-800 border border-stoic-border hover:border-stoic-gold text-zinc-200 hover:text-white px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition active:scale-95"
+          >
+            <i data-lucide="search" class="w-3.5 h-3.5 text-stoic-gold"></i>
+            <span id="scrape-btn-text">Escanear</span>
+            <div id="scrape-spinner" class="hidden w-3 h-3 border-2 border-stoic-gold border-t-transparent rounded-full animate-spin"></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Two-column Trends Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left: Top Engaging Videos -->
+        <div class="lg:col-span-6 space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
+              <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i>
+              Videos con Mayor Engagement (#estoicismo)
+            </h4>
+            <span class="text-[11px] text-zinc-500">Ordenado por % engagement</span>
+          </div>
+
+          <div id="trends-list-container" class="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
+            {% if top_trends %}
+              {% for trend in top_trends %}
+                <div class="p-3 rounded-xl bg-stoic-bg/80 border border-stoic-border hover:border-zinc-700 transition flex items-start justify-between gap-3">
+                  <div class="flex-1 min-w-0 space-y-1">
+                    <h5 class="text-xs font-semibold text-zinc-200 line-clamp-1" title="{{ trend.title }}">{{ trend.title }}</h5>
+                    <div class="flex items-center gap-3 text-[10px] text-zinc-400">
+                      <span class="flex items-center gap-1"><i data-lucide="tag" class="w-3 h-3 text-stoic-goldDim"></i>#{{ trend.tag }}</span>
+                      {% if trend.metadata and trend.metadata.view_count %}
+                        <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i>{{ "{:,}".format(trend.metadata.view_count) }} views</span>
+                      {% endif %}
+                      {% if trend.metadata and trend.metadata.like_count %}
+                        <span class="flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3 text-rose-400"></i>{{ "{:,}".format(trend.metadata.like_count) }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center gap-2 flex-shrink-0">
+                    <span class="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                      {{ trend.engagement_score }}%
+                    </span>
+                    {% if trend.url %}
+                      <a href="{{ trend.url }}" target="_blank" rel="noopener noreferrer" class="p-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-zinc-400 hover:text-white transition" title="Ver video original">
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                      </a>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <div class="p-6 rounded-xl bg-stoic-bg/50 border border-dashed border-stoic-border text-center space-y-2">
+                <p class="text-xs text-zinc-400">No hay tendencias registradas aún.</p>
+                <button onclick="scrapeTrends()" class="text-xs text-stoic-gold hover:underline">Hacer clic aquí para escanear #estoicismo ahora</button>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Right: AI-Generated Viral Hooks for Marcus Aurelius -->
+        <div class="lg:col-span-6 space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
+              <i data-lucide="brain" class="w-4 h-4 text-stoic-gold"></i>
+              Ganchos Psicológicos Generados por Gemini
+            </h4>
+            <span class="text-[11px] text-stoic-gold font-medium">1-clic para generar</span>
+          </div>
+
+          <div id="hooks-list-container" class="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
+            {% for hook in trending_hooks %}
+              <div class="p-3 rounded-xl bg-gradient-to-r from-stoic-bg to-stoic-black border border-stoic-gold/20 hover:border-stoic-gold/50 transition flex items-center justify-between gap-3 group">
+                <div class="flex items-start gap-2.5 flex-1 min-w-0">
+                  <i data-lucide="quote" class="w-4 h-4 text-stoic-gold flex-shrink-0 mt-0.5 opacity-70"></i>
+                  <p class="text-xs text-zinc-200 font-serif italic line-clamp-2 leading-relaxed">
+                    "{{ hook }}"
+                  </p>
+                </div>
+                <button 
+                  type="button" 
+                  onclick="useHookInGenerator('{{ hook|replace("'", "\\'") }}')"
+                  class="flex-shrink-0 px-2.5 py-1.5 rounded-lg bg-stoic-gold/10 hover:bg-stoic-gold border border-stoic-gold/40 text-stoic-gold hover:text-black text-xs font-semibold flex items-center gap-1 transition duration-150 active:scale-95"
+                  title="Usar este gancho para crear un nuevo video"
+                >
+                  <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                  <span>Usar</span>
+                </button>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Videos Catalog Section -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="font-cinzel text-xl font-bold text-white flex items-center gap-2">
+            <i data-lucide="clapperboard" class="w-5 h-5 text-stoic-gold"></i>
+            Catálogo de Producción
+          </h3>
+          <p class="text-xs text-stoic-muted">Revisa, reproduce y aprueba los videos listos para publicación.</p>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-zinc-400">Filtro:</span>
+          <select id="status-filter" onchange="filterVideos()" class="bg-stoic-card border border-stoic-border rounded-lg px-2.5 py-1.5 text-zinc-200 focus:outline-none focus:border-stoic-gold">
+            <option value="ALL">Todos los videos ({{ metrics.total }})</option>
+            <option value="READY_FOR_REVIEW">Pendientes de Revisión ({{ metrics.pending }})</option>
+            <option value="APPROVED">Aprobados ({{ metrics.approved }})</option>
+            <option value="REJECTED">Rechazados ({{ metrics.rejected }})</option>
+            <option value="DRAFT">Borradores ({{ metrics.draft }})</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      {% if not videos %}
+        <div class="bg-stoic-card border border-dashed border-stoic-border rounded-2xl p-12 text-center max-w-lg mx-auto">
+          <div class="w-16 h-16 rounded-full bg-stoic-bg mx-auto flex items-center justify-center text-zinc-500 mb-4">
+            <i data-lucide="film" class="w-8 h-8 text-stoic-goldDim"></i>
+          </div>
+          <h4 class="font-cinzel font-bold text-white text-lg">No hay videos generados aún</h4>
+          <p class="text-xs text-stoic-muted mt-2">
+            Utiliza la barra superior para generar tu primer video viral sobre Estoicismo. El proceso es 100% automático.
+          </p>
+        </div>
+      {% endif %}
+
+      <!-- Videos Grid (Responsive 1 to 3 columns) -->
+      <div id="video-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for video in videos %}
+          <div 
+            class="video-card bg-stoic-card border border-stoic-border hover:border-zinc-600 rounded-2xl p-4 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:scale-[1.01]"
+            data-video-id="{{ video.id }}"
+            data-status="{{ video.status }}"
+          >
+            <!-- Card Header: Title & Status Badge -->
+            <div class="space-y-2 mb-3">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex-1">
+                  <span class="text-[10px] font-mono uppercase tracking-wider text-stoic-goldDim font-semibold">Video #{{ video.id }} • {{ video.theme }}</span>
+                  <h4 class="font-bold text-sm text-white line-clamp-1 mt-0.5" title="{{ video.title }}">{{ video.title }}</h4>
+                </div>
+                
+                <!-- Status Badge -->
+                <span id="badge-{{ video.id }}" class="status-badge text-[11px] px-2.5 py-0.5 rounded-full font-semibold whitespace-nowrap border
+                  {% if video.status == 'READY_FOR_REVIEW' %}
+                    bg-amber-500/15 border-amber-500/40 text-amber-300 animate-pulse
+                  {% elif video.status == 'APPROVED' %}
+                    bg-emerald-500/15 border-emerald-500/40 text-emerald-300
+                  {% elif video.status == 'REJECTED' %}
+                    bg-rose-500/15 border-rose-500/40 text-rose-300
+                  {% else %}
+                    bg-blue-500/15 border-blue-500/40 text-blue-300
+                  {% endif %}
+                ">
+                  {{ video.status }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Video Player 9:16 Vertical -->
+            <div class="relative w-full aspect-[9/16] bg-black rounded-xl overflow-hidden border border-stoic-border mb-4 shadow-inner flex items-center justify-center group">
+              {% if video.web_video_url %}
+                <video 
+                  controls 
+                  preload="metadata"
+                  class="w-full h-full object-cover"
+                  playsinline
+                >
+                  <source src="{{ video.web_video_url }}" type="video/mp4">
+                  Tu navegador no soporta reproducción de video HTML5.
+                </video>
+              {% else %}
+                <div class="text-center p-6 space-y-2">
+                  <div class="w-12 h-12 rounded-full bg-stoic-bg mx-auto flex items-center justify-center text-zinc-500">
+                    <i data-lucide="loader" class="w-6 h-6 animate-spin text-stoic-gold"></i>
+                  </div>
+                  <p class="text-xs text-zinc-400">Procesando video...</p>
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Narration Hook Preview -->
+            <div class="bg-stoic-bg/70 border border-stoic-border/50 rounded-xl p-3 mb-3 text-xs space-y-1">
+              <span class="text-zinc-500 font-semibold block text-[10px] uppercase">Hook de Viralidad:</span>
+              <p class="text-zinc-200 line-clamp-2 italic font-serif">
+                "{{ video.narration.split('.')[0] }}..."
+              </p>
+            </div>
+
+            <!-- TikTok Caption & Copy Button -->
+            <div class="space-y-1.5 mb-4">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-zinc-400 font-medium">Caption para TikTok</span>
+                <button 
+                  type="button" 
+                  onclick="copyCaption('caption-text-{{ video.id }}', this)"
+                  class="text-stoic-gold hover:text-white flex items-center gap-1 transition"
+                  title="Copiar texto y hashtags al portapapeles"
+                >
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                  <span>Copiar</span>
+                </button>
+              </div>
+              <textarea 
+                id="caption-text-{{ video.id }}" 
+                readonly 
+                rows="3" 
+                class="w-full bg-stoic-bg border border-stoic-border/70 rounded-lg p-2 text-xs text-zinc-300 font-mono resize-none focus:outline-none select-all"
+              >{{ video.caption }}</textarea>
+            </div>
+
+            <!-- Moderation Action Buttons -->
+            <div class="pt-2 border-t border-stoic-border/60 flex items-center gap-2">
+              <button 
+                type="button" 
+                onclick="updateStatus({{ video.id }}, 'APPROVED')"
+                class="flex-1 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 hover:text-emerald-200 text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition active:scale-95"
+              >
+                <i data-lucide="check" class="w-4 h-4"></i>
+                <span>Aprobar</span>
+              </button>
+
+              <button 
+                type="button" 
+                onclick="updateStatus({{ video.id }}, 'REJECTED')"
+                class="flex-1 bg-rose-600/15 hover:bg-rose-600/25 border border-rose-500/30 text-rose-300 hover:text-rose-200 text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition active:scale-95"
+              >
+                <i data-lucide="x" class="w-4 h-4"></i>
+                <span>Rechazar</span>
+              </button>
+            </div>
+
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-stoic-border py-4 bg-stoic-black text-center text-xs text-zinc-500">
+    Stoic Studio Engine • Generador de Videos Autónomo para TikTok • Meditaciones & Filosofía Clásica
+  </footer>
+
+  <!-- Frontend Logic Scripts -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Select suggested theme helper
+    function selectSuggestedTheme(name, author) {
+      document.getElementById('theme-input').value = name;
+      document.getElementById('author-select').value = author;
+      showToast(`Tema seleccionado: ${name}`, 'info');
+    }
+
+    // Toast notifications
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      
+      const bgColors = {
+        success: 'bg-emerald-950/90 border-emerald-500/50 text-emerald-200',
+        error: 'bg-rose-950/90 border-rose-500/50 text-rose-200',
+        info: 'bg-zinc-900/90 border-stoic-gold/40 text-stoic-gold'
+      };
+
+      toast.className = `pointer-events-auto px-4 py-3 rounded-xl border shadow-2xl text-xs flex items-center gap-2.5 transform transition-all duration-300 translate-y-2 opacity-0 ${bgColors[type] || bgColors.info}`;
+      toast.innerHTML = `
+        <span class="font-medium">${message}</span>
+      `;
+      
+      container.appendChild(toast);
+      
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Copy caption to clipboard
+    async function copyCaption(elementId, btn) {
+      const textarea = document.getElementById(elementId);
+      if (!textarea) return;
+
+      try {
+        await navigator.clipboard.writeText(textarea.value);
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i><span class="text-emerald-400 font-bold">¡Copiado!</span>`;
+        lucide.createIcons();
+        showToast('Caption y hashtags copiados al portapapeles', 'success');
+
+        setTimeout(() => {
+          btn.innerHTML = originalHtml;
+          lucide.createIcons();
+        }, 2000);
+      } catch (err) {
+        textarea.select();
+        document.execCommand('copy');
+        showToast('Copiado al portapapeles', 'success');
+      }
+    }
+
+    // Update video review status via API
+    async function updateStatus(videoId, newStatus) {
+      try {
+        const response = await fetch(`/api/videos/${videoId}/status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+
+        if (!response.ok) {
+          throw new Error('Error en el servidor al actualizar');
+        }
+
+        const data = await response.json();
+        const badge = document.getElementById(`badge-${videoId}`);
+        const card = document.querySelector(`[data-video-id="${videoId}"]`);
+        
+        if (badge) {
+          badge.textContent = newStatus;
+          badge.className = 'status-badge text-[11px] px-2.5 py-0.5 rounded-full font-semibold whitespace-nowrap border ';
+          if (newStatus === 'APPROVED') {
+            badge.className += 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300';
+          } else if (newStatus === 'REJECTED') {
+            badge.className += 'bg-rose-500/15 border-rose-500/40 text-rose-300';
+          } else {
+            badge.className += 'bg-amber-500/15 border-amber-500/40 text-amber-300';
+          }
+        }
+
+        if (card) {
+          card.setAttribute('data-status', newStatus);
+        }
+
+        showToast(`Video #${videoId} marcado como ${newStatus}`, 'success');
+        refreshCounts();
+      } catch (err) {
+        showToast(`Error al actualizar estado: ${err.message}`, 'error');
+      }
+    }
+
+    // Filter videos by status in the DOM
+    function filterVideos() {
+      const filter = document.getElementById('status-filter').value;
+      const cards = document.querySelectorAll('.video-card');
+      
+      cards.forEach(card => {
+        const status = card.getAttribute('data-status');
+        if (filter === 'ALL' || status === filter) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Handle Generation Form Submit
+    document.getElementById('generate-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const theme = document.getElementById('theme-input').value.trim();
+      const author = document.getElementById('author-select').value;
+      
+      const btn = document.getElementById('btn-generate');
+      const btnText = document.getElementById('btn-text');
+      const spinner = document.getElementById('btn-spinner');
+
+      btn.disabled = true;
+      btnText.textContent = 'Procesando en segundo plano...';
+      spinner.classList.remove('hidden');
+
+      try {
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ theme, author })
+        });
+
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.detail || 'Error al iniciar tarea');
+        }
+
+        showToast('¡Tarea iniciada! El video se está generando en segundo plano.', 'success');
+
+        // Reset button after 3 seconds
+        setTimeout(() => {
+          btn.disabled = false;
+          btnText.textContent = 'Generar Nuevo Video';
+          spinner.classList.add('hidden');
+        }, 3000);
+
+      } catch (err) {
+        showToast(err.message, 'error');
+        btn.disabled = false;
+        btnText.textContent = 'Generar Video';
+        spinner.classList.add('hidden');
+      }
+    });
+
+    // Transfer hook directly into the generator form and focus
+    function useHookInGenerator(hookText) {
+      const themeInput = document.getElementById('theme-input');
+      if (!themeInput) return;
+
+      themeInput.value = hookText;
+      showToast('¡Gancho transferido al generador! Ajusta el autor y genera.', 'info');
+      
+      // Smooth scroll to generator form
+      document.getElementById('generate-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      
+      // Visual pulse on input
+      themeInput.classList.add('ring-2', 'ring-stoic-gold');
+      themeInput.focus();
+      setTimeout(() => {
+        themeInput.classList.remove('ring-2', 'ring-stoic-gold');
+      }, 1500);
+    }
+
+    // Scrape trends via API and update the DOM
+    async function scrapeTrends() {
+      const tagInput = document.getElementById('scrape-tag-input');
+      const tag = tagInput ? tagInput.value.trim() : 'estoicismo';
+      const btn = document.getElementById('btn-scrape-trends');
+      const btnText = document.getElementById('scrape-btn-text');
+      const spinner = document.getElementById('scrape-spinner');
+
+      if (btn) btn.disabled = true;
+      if (btnText) btnText.textContent = 'Buscando...';
+      if (spinner) spinner.classList.remove('hidden');
+
+      showToast(`Escaneando tendencias para #${tag}...`, 'info');
+
+      try {
+        const res = await fetch('/api/trends/scrape', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tag })
+        });
+
+        if (!res.ok) {
+          throw new Error('Error al escanear tendencias en el servidor.');
+        }
+
+        const data = await res.json();
+        showToast(`✓ Se analizaron ${data.count || 0} tendencias y nuevos ganchos.`, 'success');
+
+        // Render updated trends list
+        const trendsContainer = document.getElementById('trends-list-container');
+        if (trendsContainer && data.trends && data.trends.length > 0) {
+          trendsContainer.innerHTML = data.trends.map(t => `
+            <div class="p-3 rounded-xl bg-stoic-bg/80 border border-stoic-border hover:border-zinc-700 transition flex items-start justify-between gap-3">
+              <div class="flex-1 min-w-0 space-y-1">
+                <h5 class="text-xs font-semibold text-zinc-200 line-clamp-1" title="${t.title}">${t.title}</h5>
+                <div class="flex items-center gap-3 text-[10px] text-zinc-400">
+                  <span class="flex items-center gap-1"><i data-lucide="tag" class="w-3 h-3 text-stoic-goldDim"></i>#${data.tag}</span>
+                  ${t.view_count ? `<span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i>${t.view_count.toLocaleString()} views</span>` : ''}
+                  ${t.like_count ? `<span class="flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3 text-rose-400"></i>${t.like_count.toLocaleString()}</span>` : ''}
+                </div>
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <span class="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                  ${t.engagement_rate}%
+                </span>
+                ${t.url ? `
+                  <a href="${t.url}" target="_blank" rel="noopener noreferrer" class="p-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-zinc-400 hover:text-white transition" title="Ver video original">
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                  </a>
+                ` : ''}
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // Render updated hooks list
+        const hooksContainer = document.getElementById('hooks-list-container');
+        if (hooksContainer && data.hooks && data.hooks.length > 0) {
+          hooksContainer.innerHTML = data.hooks.map(h => `
+            <div class="p-3 rounded-xl bg-gradient-to-r from-stoic-bg to-stoic-black border border-stoic-gold/20 hover:border-stoic-gold/50 transition flex items-center justify-between gap-3 group">
+              <div class="flex items-start gap-2.5 flex-1 min-w-0">
+                <i data-lucide="quote" class="w-4 h-4 text-stoic-gold flex-shrink-0 mt-0.5 opacity-70"></i>
+                <p class="text-xs text-zinc-200 font-serif italic line-clamp-2 leading-relaxed">
+                  "${h}"
+                </p>
+              </div>
+              <button 
+                type="button" 
+                onclick="useHookInGenerator('${h.replace(/'/g, "\\'")}')"
+                class="flex-shrink-0 px-2.5 py-1.5 rounded-lg bg-stoic-gold/10 hover:bg-stoic-gold border border-stoic-gold/40 text-stoic-gold hover:text-black text-xs font-semibold flex items-center gap-1 transition duration-150 active:scale-95"
+                title="Usar este gancho para crear un nuevo video"
+              >
+                <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                <span>Usar</span>
+              </button>
+            </div>
+          `).join('');
+        }
+
+        lucide.createIcons();
+
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        if (btn) btn.disabled = false;
+        if (btnText) btnText.textContent = 'Escanear';
+        if (spinner) spinner.classList.add('hidden');
+      }
+    }
+
+    // Refresh live metrics counters
+    async function refreshCounts() {
+      try {
+        const res = await fetch('/api/videos/status-counts');
+        if (!res.ok) return;
+        const counts = await res.json();
+        document.getElementById('metric-total').textContent = counts.total;
+        document.getElementById('metric-pending').textContent = counts.pending;
+        document.getElementById('metric-approved').textContent = counts.approved;
+      } catch (err) {
+        // Quiet failure on background polling
+      }
+    }
+
+    // Background polling every 12 seconds
+    setInterval(refreshCounts, 12000);
+  </script>
+</body>
+</html>

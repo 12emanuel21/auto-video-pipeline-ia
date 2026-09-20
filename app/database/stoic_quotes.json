@@ -1,0 +1,128 @@
+[
+  {
+    "quote": "Tienes poder sobre tu mente, no sobre los acontecimientos. Date cuenta de esto y encontrarás la fuerza.",
+    "book_ref": "Meditaciones, Libro IV, 3",
+    "theme": "control_mental",
+    "context_hint": "La soberanía sobre el juicio interno frente al caos del exterior."
+  },
+  {
+    "quote": "Si te afliges por alguna causa exterior, no es ella lo que te perturba, sino tu propio juicio sobre ella; y borrar este juicio está en tu mano.",
+    "book_ref": "Meditaciones, Libro VIII, 47",
+    "theme": "control_mental",
+    "context_hint": "La separación entre el evento objetivo y la interpretación emocional."
+  },
+  {
+    "quote": "El alma se tiñe del color de sus pensamientos.",
+    "book_ref": "Meditaciones, Libro V, 16",
+    "theme": "control_mental",
+    "context_hint": "La calidad de tu vida es el reflejo exacto de tus hábitos mentales."
+  },
+  {
+    "quote": "Rechaza la sensación de que te han herido y la herida desaparecerá por sí misma.",
+    "book_ref": "Meditaciones, Libro IV, 7",
+    "theme": "control_mental",
+    "context_hint": "Nadie puede ofenderte sin tu propio consentimiento mental."
+  },
+  {
+    "quote": "No desperdicies lo que te queda de vida especulando sobre lo que hacen los demás, a menos que tenga un fin común.",
+    "book_ref": "Meditaciones, Libro III, 4",
+    "theme": "control_mental",
+    "context_hint": "Enfocar la energía mental exclusivamente en lo propio."
+  },
+  {
+    "quote": "Al amanecer, cuando te cueste despertar, ten a mano este pensamiento: Me levanto para hacer la obra de un ser humano.",
+    "book_ref": "Meditaciones, Libro V, 1",
+    "theme": "disciplina",
+    "context_hint": "El propósito ineludible de vencer la pereza y cumplir tu deber."
+  },
+  {
+    "quote": "Haz cada cosa en la vida como si fuera la última.",
+    "book_ref": "Meditaciones, Libro II, 5",
+    "theme": "disciplina",
+    "context_hint": "Presencia radical y entrega implacable en cada acción."
+  },
+  {
+    "quote": "No te disperses: en cada esfuerzo, busca la justicia; y en cada pensamiento, mantén la certeza de la verdad.",
+    "book_ref": "Meditaciones, Libro IV, 22",
+    "theme": "disciplina",
+    "context_hint": "Foco inquebrantable en lo correcto sin dejarse llevar por distracciones."
+  },
+  {
+    "quote": "La mejor manera de vengarte de tu enemigo es no parecerte a él.",
+    "book_ref": "Meditaciones, Libro VI, 6",
+    "theme": "disciplina",
+    "context_hint": "Mantener la virtud moral incluso cuando el mundo a tu alrededor actúa con bajeza."
+  },
+  {
+    "quote": "No actúes como si fueras a vivir diez mil años. El destino pende sobre ti. Mientras vivas, mientras esté en tu poder, sé un hombre de bien.",
+    "book_ref": "Meditaciones, Libro IV, 17",
+    "theme": "disciplina",
+    "context_hint": "La urgencia implacable de la excelencia ética en el presente."
+  },
+  {
+    "quote": "Podrías dejar la vida ahora mismo. Que eso determine lo que haces, dices y piensas.",
+    "book_ref": "Meditaciones, Libro II, 11",
+    "theme": "brevedad_de_la_vida",
+    "context_hint": "Memento mori como filtro supremo de todas las decisiones diarias."
+  },
+  {
+    "quote": "El tiempo es como un río de acontecimientos, una corriente impetuosa; tan pronto se vislumbra algo, es arrastrado y otra cosa ocupa su lugar.",
+    "book_ref": "Meditaciones, Libro IV, 43",
+    "theme": "brevedad_de_la_vida",
+    "context_hint": "La naturaleza efímera e imparable de la existencia humana."
+  },
+  {
+    "quote": "Mira detrás de ti el abismo de la eternidad y delante de ti otro infinito. ¿Qué diferencia hay entre vivir tres días o tres generaciones?",
+    "book_ref": "Meditaciones, Libro IV, 50",
+    "theme": "brevedad_de_la_vida",
+    "context_hint": "La perspectiva cósmica que relativiza cualquier aflicción mundana."
+  },
+  {
+    "quote": "Corta es la vida de cada hombre, y minúsculo el rincón de la tierra donde vive.",
+    "book_ref": "Meditaciones, Libro III, 10",
+    "theme": "brevedad_de_la_vida",
+    "context_hint": "Humildad ante la inmensidad del universo."
+  },
+  {
+    "quote": "Pronto lo habrás olvidado todo; pronto todos te habrán olvidado a ti.",
+    "book_ref": "Meditaciones, Libro VII, 21",
+    "theme": "brevedad_de_la_vida",
+    "context_hint": "La vanidad de buscar la fama duradera en el mundo mortal."
+  },
+  {
+    "quote": "¿Un hombre te desprecia? Ese es su problema. Tu único cuidado es no hacer nada digno de desprecio.",
+    "book_ref": "Meditaciones, Libro XI, 13",
+    "theme": "indiferencia_opinion_ajena",
+    "context_hint": "La opinión ajena es un 'indiferente'; tu virtud es lo único relevante."
+  },
+  {
+    "quote": "A menudo me pregunto cómo es posible que cada uno se ame a sí mismo más que a todos los demás, pero valore menos su propia opinión que la de los otros.",
+    "book_ref": "Meditaciones, Libro XII, 4",
+    "theme": "indiferencia_opinion_ajena",
+    "context_hint": "La paradoja de depender de la validación social externa."
+  },
+  {
+    "quote": "¿Te preocupa que un ignorante te critique? ¿Acaso pedirías aprobación a quien no aprueba ni sus propias acciones?",
+    "book_ref": "Meditaciones, Libro VIII, 53",
+    "theme": "indiferencia_opinion_ajena",
+    "context_hint": "Desestimar el juicio de aquellos que no viven con examen de conciencia."
+  },
+  {
+    "quote": "La tranquilidad no es otra cosa que el perfecto orden de la mente.",
+    "book_ref": "Meditaciones, Libro IV, 3",
+    "theme": "control_mental",
+    "context_hint": "El refugio interior al que puedes acudir en cualquier momento sin viajar a ningún lugar."
+  },
+  {
+    "quote": "El impedimento a la acción avanza la acción. Lo que se interpone en el camino se convierte en el camino.",
+    "book_ref": "Meditaciones, Libro V, 20",
+    "theme": "disciplina",
+    "context_hint": "El obstáculo es el camino: transmutar cualquier dificultad en oportunidad de crecimiento."
+  },
+  {
+    "quote": "Nada te sucede que no estés capacitado por naturaleza para soportar.",
+    "book_ref": "Meditaciones, Libro V, 18",
+    "theme": "control_mental",
+    "context_hint": "Tu capacidad interna de resiliencia siempre es superior al problema presente."
+  }
+]

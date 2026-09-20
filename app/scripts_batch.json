@@ -1,0 +1,132 @@
+[
+    {
+        "day_number": 1,
+        "theme": "Control y Elección",
+        "philosopher": "Epicteto",
+        "hook": "La mayoría de tus problemas existen porque intentas controlar lo incontrolable.",
+        "body": "Epicteto decía que tu única tarea real es separar dos listas: lo que depende de ti y lo que no[cite: 1]. Tus opiniones, tus acciones y tus deseos son tuyos[cite: 1]. El clima, la economía y las decisiones ajenas jamás lo serán[cite: 1].",
+        "punchline": "Deja de desgastarte en lo exterior. Domina tu mente y habrás ganado el día.",
+        "visual_sequence": [
+            "caos",
+            "control",
+            "foco"
+        ]
+    },
+    {
+        "day_number": 2,
+        "theme": "La educación es libertad",
+        "philosopher": "Epicteto",
+        "hook": "¿Crees que eres libre solo porque nadie te da órdenes? Te estás engañando.",
+        "body": "Epicteto afirmaba que solo quien se educa a sí mismo alcanza la verdadera libertad[cite: 1]. No se trata de coleccionar títulos académicos, sino de entrenar tu mente para no ser esclavo del miedo, la ira o la distracción[cite: 1]. Quien no se conoce a sí mismo es manipulable[cite: 1].",
+        "punchline": "Aprender no es para presumir inteligencia: es la armadura de tu libertad.",
+        "visual_sequence": [
+            "esclavo digital",
+            "pausa reflexiva",
+            "caminar firme"
+        ]
+    },
+    {
+        "day_number": 3,
+        "theme": "Muéstrate implacable con las cosas que no importan",
+        "philosopher": "Séneca",
+        "hook": "Estás regalando el recurso más valioso de tu existencia y ni siquiera te das cuenta.",
+        "body": "Séneca advertía que dejamos que cualquiera nos robe pedazos de vida con favores absurdos, chismes y compromisos vacíos[cite: 1]. Cada vez que dices que sí a lo irrelevante por no quedar mal, te estás diciendo que no a ti mismo[cite: 1]. Tu tiempo se agota rápido[cite: 1].",
+        "punchline": "Aprende a decir 'no' sin culpa, o pasarás tu vida viviendo la agenda ajena.",
+        "visual_sequence": [
+            "reloj acelerado",
+            "notificaciones invasivas",
+            "pantalla apagada"
+        ]
+    },
+    {
+        "day_number": 4,
+        "theme": "Las tres grandes",
+        "philosopher": "Marco Aurelio",
+        "hook": "Toda la filosofía estoica se resume en tres hábitos diarios que caben en tu bolsillo.",
+        "body": "Marco Aurelio redujo el dominio propio a tres pilares fundamentales: controla tu percepción para juzgar con objetividad, dirige tus acciones para beneficiar a tu comunidad y acepta con serenidad lo que escape a tu control[cite: 1]. Domina esto y serás inquebrantable[cite: 1].",
+        "punchline": "Mente lúcida, acción recta y aceptación total: nada externo podrá tumbarte.",
+        "visual_sequence": [
+            "ruido mental",
+            "manos trabajando",
+            "rostro sereno"
+        ]
+    },
+    {
+        "day_number": 5,
+        "theme": "Aclara tus intenciones",
+        "philosopher": "Séneca",
+        "hook": "Estar ocupado todo el día no significa que estés avanzando hacia alguna parte.",
+        "body": "Séneca decía que a las personas inquietas no las mueve el propósito, sino ilusiones falsas, corriendo como locos sin dirección[cite: 1]. Si no defines con precisión cuál es tu objetivo hoy, cualquier estímulo dictará tu rumbo y agotarás tu energía en círculos[cite: 1].",
+        "punchline": "No confundas movimiento con progreso: si no sabes hacia dónde vas, ya estás perdido.",
+        "visual_sequence": [
+            "rueda de hámster",
+            "brújula en mano",
+            "paso decidido"
+        ]
+    },
+    {
+        "day_number": 6,
+        "theme": "Dónde, quién, qué y por qué",
+        "philosopher": "Marco Aurelio",
+        "hook": "¿Por qué buscas la aprobación de personas que ni siquiera saben quiénes son ellas mismas?",
+        "body": "Marco Aurelio nos lanza un reto demoledor: ¿cómo te apoyas en el aplauso de gente que no tiene idea de su propio propósito en el mundo?[cite: 1] Gastamos semanas imitando moldes ajenos en vez de sentarnos en silencio a responder qué representamos y para qué existimos[cite: 1].",
+        "punchline": "Si no defines tus propios principios, serás el peón de los caprichos del resto.",
+        "visual_sequence": [
+            "multitud aplaudiendo",
+            "espejo solitario",
+            "mirada introspectiva"
+        ]
+    },
+    {
+        "day_number": 7,
+        "theme": "Siete funciones claras de la mente",
+        "philosopher": "Epicteto",
+        "hook": "Tu cerebro solo tiene una tarea real, y probablemente lo estás saturando de basura.",
+        "body": "Epicteto resumió el deber del alma en siete acciones: elegir el bien, rechazar tentaciones, desear mejorar, renunciar a lo falso, prepararse para lo peor, hallar prioridades y aceptar la realidad[cite: 1]. Todo juicio reactivo o queja innecesaria solo contamina tu lucidez[cite: 1].",
+        "punchline": "Limpia tus pensamientos de juicios tóxicos: lo que no te aporta enfoque, te corrompe.",
+        "visual_sequence": [
+            "estática mental",
+            "filtro depurador",
+            "claridad absoluta"
+        ]
+    },
+    {
+        "day_number": 8,
+        "theme": "Reconocer nuestras adicciones",
+        "philosopher": "Séneca",
+        "hook": "Crees que eres dueño de tus actos, pero no puedes pasar media hora sin mirar tu teléfono.",
+        "body": "Séneca explicaba que cualquier indulgencia menor se convierte en tiranía si dependes de ella para arrancar el día[cite: 1]. La verdadera esclavitud no necesita cadenas de hierro: empieza en el instante exacto en que pierdes la libertad de abstenerte de un hábito[cite: 1].",
+        "punchline": "Si no eres capaz de renunciar a un estímulo por voluntad propia, tú eres su sirviente.",
+        "visual_sequence": [
+            "scroll compulsivo",
+            "bloqueo de pantalla",
+            "respiración profunda"
+        ]
+    },
+    {
+        "day_number": 9,
+        "theme": "Lo que controlamos y lo que no",
+        "philosopher": "Epicteto",
+        "hook": "Casi toda tu ansiedad cotidiana nace de querer cambiar cosas que no te pertenecen.",
+        "body": "Epicteto insistía en que ni tu estatus, ni tu cuerpo ni las reacciones de los demás están bajo tu dominio; únicamente lo están tus opiniones, deseos y aversiones[cite: 1]. No controlas el suceso que te golpea, pero eres el amo supremo de lo que decides pensar sobre él[cite: 1].",
+        "punchline": "Deja de pelear con la realidad exterior: gobierna tu interior y nada te faltará.",
+        "visual_sequence": [
+            "tráfico colapsado",
+            "respiración en calma",
+            "enfoque interno"
+        ]
+    },
+    {
+        "day_number": 10,
+        "theme": "Si quieres ser constante",
+        "philosopher": "Epicteto",
+        "hook": "La paz mental no se consigue huyendo a una montaña, sino entrenando tu juicio.",
+        "body": "Epicteto enseñaba el secreto de la 'eustatheia': mantener el balance y la estabilidad en medio del caos social[cite: 1]. Los acontecimientos externos no tienen valor moral; son solo materia prima que tu razón debe ordenar[cite: 1]. Si tu juicio se tuerce ante el conflicto, tu vida entera se torcerá[cite: 1].",
+        "punchline": "No esperes que el entorno se calme: conviértete tú en el punto fijo de la tormenta.",
+        "visual_sequence": [
+            "huracán urbano",
+            "eje inmóvil",
+            "mirada inquebrantable"
+        ]
+    }
+]
